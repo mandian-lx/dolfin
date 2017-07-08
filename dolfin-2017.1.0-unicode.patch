@@ -1,0 +1,84 @@
+--- dolfin-2017.1.0/utils/pylit/pylit.py.unicode
++++ dolfin-2017.1.0/utils/pylit/pylit.py
+@@ -136,7 +136,7 @@
+ #
+ # ::
+ 
+-import os, sys
++import os, sys, io
+ import re, optparse
+ 
+ 
+@@ -1496,7 +1496,7 @@
+     if infile == '-':
+         in_stream = sys.stdin
+     else:
+-        in_stream = open(infile, 'r')
++        in_stream = io.open(infile, 'r', encoding='utf-8')
+ 
+     if outfile == '-':
+         out_stream = sys.stdout
+@@ -1505,7 +1505,7 @@
+     elif overwrite == 'update' and is_newer(outfile, infile):
+         raise IOError((1, "Output file is newer than input file!", outfile))
+     else:
+-        out_stream = open(outfile, 'w')
++        out_stream = io.open(outfile, 'w', encoding='utf-8')
+     return (in_stream, out_stream)
+ 
+ # is_newer
+@@ -1731,7 +1731,10 @@
+ 
+ # Convert and write to out_stream::
+ 
+-    out_stream.write(str(converter))
++    if sys.version_info[0] == 2:
++        out_stream.write(unicode(converter))
++    else:
++        out_stream.write(str(converter))
+ 
+     if out_stream is not sys.stdout:
+         print("extract written to", out_stream.name)
+--- dolfin-2017.1.0/cmake/scripts/generate-swig-interface.py.unicode
++++ dolfin-2017.1.0/cmake/scripts/generate-swig-interface.py
+@@ -23,6 +23,7 @@
+ import glob
+ import time
+ import sys
++import io
+ 
+ 
+ # Add local site-packages to path,
+@@ -212,7 +213,7 @@
+                     continue
+ 
+                 # Read code
+-                with open(header_file) as f:
++                with io.open(header_file, encoding="utf-8") as f:
+                     code = f.read()
+ 
+                 try:
+--- dolfin-2017.1.0/site-packages/dolfin_utils/documentation/extractdocumentation.py.unicode
++++ dolfin-2017.1.0/site-packages/dolfin_utils/documentation/extractdocumentation.py
+@@ -26,7 +26,7 @@
+ # First added:  2010-08-26
+ # Last changed: 2011-07-10
+ 
+-import os
++import os, io
+ 
+ def extract_documentation(dolfin_dir, header, module):
+     "Extract documentation for given header in given module"
+@@ -49,9 +49,10 @@
+     indent = 0
+ 
+     # Iterate over each line
+-    f = open(os.path.join(dolfin_dir, "dolfin", module, header))
++    f = io.open(os.path.join(dolfin_dir, "dolfin", module, header), encoding="utf-8")
+     for line in f:
+-
++        line = line
++	
+         # Check for comment
+         if "///" in line:
+ 
