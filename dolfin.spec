@@ -1,6 +1,6 @@
 %define _disable_ld_no_undefined 1
 
-Summary:	A computational backend of FEniCS and implementation of the FEniCS Problem Solving Environment
+Summary:	An implementation of the FEniCS Problem Solving Environment
 Name:		dolfin
 Version:	2017.1.0
 Release:	1
