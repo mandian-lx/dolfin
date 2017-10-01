@@ -1,5 +1,5 @@
---- dolfin-2017.1.0/utils/pylit/pylit.py.unicode
-+++ dolfin-2017.1.0/utils/pylit/pylit.py
+--- a/utils/pylit/pylit.py.unicode
++++ b/utils/pylit/pylit.py
 @@ -136,7 +136,7 @@
  #
  # ::
@@ -39,46 +39,30 @@
  
      if out_stream is not sys.stdout:
          print("extract written to", out_stream.name)
---- dolfin-2017.1.0/cmake/scripts/generate-swig-interface.py.unicode
-+++ dolfin-2017.1.0/cmake/scripts/generate-swig-interface.py
-@@ -23,6 +23,7 @@
- import glob
- import time
- import sys
-+import io
- 
- 
- # Add local site-packages to path,
-@@ -212,7 +213,7 @@
+--- a/cmake/scripts/generate-swig-interface.py.unicode
++++ b/cmake/scripts/generate-swig-interface.py
+@@ -212,8 +212,8 @@
                      continue
  
                  # Read code
 -                with open(header_file) as f:
-+                with io.open(header_file, encoding="utf-8") as f:
-                     code = f.read()
+-                    code = f.read()
++                with open(header_file, 'rb') as f:
++                    code = f.read().decode('utf-8')
  
                  try:
---- dolfin-2017.1.0/site-packages/dolfin_utils/documentation/extractdocumentation.py.unicode
-+++ dolfin-2017.1.0/site-packages/dolfin_utils/documentation/extractdocumentation.py
-@@ -26,7 +26,7 @@
- # First added:  2010-08-26
- # Last changed: 2011-07-10
- 
--import os
-+import os, io
- 
- def extract_documentation(dolfin_dir, header, module):
-     "Extract documentation for given header in given module"
+                     # Extract type info
+--- a/site-packages/dolfin_utils/documentation/extractdocumentation.py.unicode
++++ b/site-packages/dolfin_utils/documentation/extractdocumentation.py
 @@ -49,9 +49,10 @@
      indent = 0
  
      # Iterate over each line
 -    f = open(os.path.join(dolfin_dir, "dolfin", module, header))
-+    f = io.open(os.path.join(dolfin_dir, "dolfin", module, header), encoding="utf-8")
++    f = open(os.path.join(dolfin_dir, "dolfin", module, header), 'rb')
      for line in f:
--
-+        line = line
-+	
++        line = line.decode('utf-8')
+ 
          # Check for comment
          if "///" in line:
- 
+

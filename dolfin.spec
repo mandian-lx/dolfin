@@ -16,7 +16,7 @@ BuildRequires:	boost-devel
 BuildRequires:	pkgconfig(eigen3)
 BuildRequires:	hdf5-devel
 BuildRequires:	suitesparse-devel
-BuildRequires:	#libscotch-dev
+BuildRequires:	scotch-devel
 BuildRequires:	vtk-devel
 BuildRequires:	pkgconfig(libxml-2.0)
 BuildRequires:	mpi-devel
@@ -46,6 +46,7 @@ Problem Solving Environment in Python and C++.
 
 %prep
 %setup -q
+%apply_patches
 
 # Apply all patches
 %patch0 -p1 -b .unicode
@@ -55,6 +56,7 @@ Problem Solving Environment in Python and C++.
 	-DCMAKE_BUILD_TYPE:STRING=RelWithDebInfo	\
 	-DBUILD_SHARED_LIBS:BOOL=ON			\
 	-DCMAKE_SKIP_RPATH:BOOL=ON			\
+	-DCMAKE_INSTALL_RPATH_USE_LINK_PATH:BOOL=OFF    \
 	-DDOLFIN_ENABLE_TRILINOS:BOOL=OFF		\
 	-DDOLFIN_ENABLE_GTEST:BOOL=OFF			\
 	-DDOLFIN_ENABLE_VTK:BOOL=OFF			\
